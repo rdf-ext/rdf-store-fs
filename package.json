@@ -1,0 +1,28 @@
+{
+  "name": "rdf-store-fs",
+  "version": "0.1.0",
+  "description": "File-system based RDF Store that follows the RDF Interface specification",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicola/rdf-store-fs.git"
+  },
+  "keywords": [
+    "rdf-stores",
+    "rdf",
+    "linked",
+    "data"
+  ],
+  "author": "Nicola Greco <me@nicola.io> (http://nicolagreco.com/)",
+  "license": "Apache 2",
+  "bugs": {
+    "url": "https://github.com/nicola/rdf-store-fs/issues"
+  },
+  "homepage": "https://github.com/nicola/rdf-store-fs",
+  "dependencies": {
+    "rdf-store-abstract": "^0.1.0"
+  }
+}
