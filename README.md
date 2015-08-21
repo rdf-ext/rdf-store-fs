@@ -1,6 +1,6 @@
-# rdf-store-abstract
+# rdf-store-fs
 
-Abstract RDF Store that follows the [RDF Interface](http://bergos.github.io/rdf-ext-spec/) specification
+Filesystem based RDF Store that follows the [RDF Interface](http://bergos.github.io/rdf-ext-spec/) specification
 
 ## Install
 
