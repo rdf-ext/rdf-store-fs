@@ -17,7 +17,7 @@
     "data"
   ],
   "author": "Nicola Greco <me@nicola.io> (http://nicolagreco.com/)",
-  "license": "Apache 2",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/nicola/rdf-store-fs/issues"
   },
