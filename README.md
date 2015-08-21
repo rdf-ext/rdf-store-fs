@@ -5,7 +5,7 @@ Filesystem based RDF Store that follows the [RDF Interface](http://bergos.github
 ## Install
 
 ```
-npm install --save rdf-store-abstract
+npm install --save rdf-store-fs
 ```
 
 ## History
