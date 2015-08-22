@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nicola/rdf-store-fs.git"
+    "url": "https://github.com/rdf-ext/rdf-store-fs.git"
   },
   "keywords": [
     "rdf-stores",
@@ -19,9 +19,9 @@
   "author": "Nicola Greco <me@nicola.io> (http://nicolagreco.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nicola/rdf-store-fs/issues"
+    "url": "https://github.com/rdf-ext/rdf-store-fs/issues"
   },
-  "homepage": "https://github.com/nicola/rdf-store-fs",
+  "homepage": "https://github.com/rdf-ext/rdf-store-fs",
   "dependencies": {
     "rdf-store-abstract": "^0.1.0"
   }
