@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/rdf-ext/rdf-store-fs",
   "dependencies": {
+    "fs-extra": "^0.23.1",
     "rdf-store-abstract": "^0.1.0"
   }
 }

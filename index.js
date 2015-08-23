@@ -1,14 +1,13 @@
-/* global rdf:true */
-'use strict';
+module.exports = FileStore;
 
 var
   fs = require('fs'),
   path = require('path'),
   url = require('url'),
-  AbstractStore = require('rdf-store-abstract');
+  AbstractStore = require('rdf-store-abstract'),
+  mkdirp = require('fs-extra').mkdirp;
 
-
-var FileStore = function (rdf, options) {
+function FileStore (rdf, options) {
   if (options == null) {
     options = {};
   }
@@ -37,37 +36,43 @@ var FileStore = function (rdf, options) {
       return callback(null);
     }
 
-    self.parse(
-      fs.readFileSync(graphPath(iri)).toString(),
-      callback,
-      iri);
+    fs.readFile(graphPath(iri), 'utf8', function (err, data) {
+      if (err) return callback(null, err);
+
+      self.parse(
+        data.toString(),
+        callback,
+        iri);
+    });
   };
 
   this.add = function (iri, graph, callback) {
     self.serialize(
       graph,
       function (serialized) {
-        fs.writeFileSync(graphPath(iri), serialized);
-
-        callback(graph);
+        writeFileRecursively(graphPath(iri), serialized, function (err) {
+          if (err) return callback(null, err);
+          callback(graph);
+        });
       }, iri);
   };
 
   this.delete = function (iri, callback) {
     if (graphExists(iri)) {
-      fs.unlink(graphPath(iri));
+      fs.unlink(graphPath(iri), function (err) {
+        if (err) return callback(null, err);
+        callback(true);
+      });
     }
-
-    callback(true);
   };
-};
+}
+
+function writeFileRecursively (file, contents, callback) {
+  mkdirp(path.dirname(file), function (err) {
+    if (err) return callback(err);
+    return fs.writeFile(file, contents, callback);
+  });
+}
 
 FileStore.prototype = new AbstractStore();
 FileStore.prototype.constructor = FileStore;
-
-
-module.exports = function (rdf) {
-  rdf.FileStore = FileStore.bind(null, rdf);
-};
-
-module.exports.store = FileStore;
