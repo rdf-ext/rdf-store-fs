@@ -4,12 +4,10 @@ var inherits = require('util').inherits;
 var path = require('path');
 var folderToRdf = require('folder-to-rdf');
 
-var
-  fs = require('fs'),
-  path = require('path'),
-  url = require('url'),
-  AbstractStore = require('rdf-store-abstract'),
-  mkdirp = require('fs-extra').mkdirp;
+var fs = require('fs');
+var url = require('url');
+var AbstractStore = require('rdf-store-abstract');
+var mkdirp = require('fs-extra').mkdirp;
 
 function writeFileRecursively (file, contents, callback) {
   mkdirp(path.dirname(file), function (err) {
@@ -41,19 +39,13 @@ FileStore.prototype.graphPath = function (iri) {
   return path.join(this.path, this.graphFile(parsed));
 };
 
-FileStore.prototype.graphExists = function (iri) {
-  return fs.existsSync(this.graphPath(iri));
-};
-
 FileStore.prototype.graph = function (iri, callback, options) {
   var self = this;
-
-
   var graphPath = self.graphPath(iri)
 
   // TODO maybe use good heuristics
   // since we call fs.stats twice
-  fs.stats(graphPath, function (err, stats) {
+  fs.stat(graphPath, function (err, stats) {
     if (err) return callback(null, err);
 
     // Read the file
@@ -92,10 +84,8 @@ FileStore.prototype.add = function (iri, graph, callback) {
 FileStore.prototype.delete = function (iri, callback) {
   var self = this;
 
-  if (self.graphExists(iri)) {
-    fs.unlink(self.graphPath(iri), function (err) {
-      if (err) return callback(null, err);
-      callback(true);
-    });
-  }
+  fs.unlink(self.graphPath(iri), function (err) {
+    if (err) return callback(null, err);
+    callback(true);
+  });
 };
