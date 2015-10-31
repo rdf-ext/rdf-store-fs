@@ -1,18 +1,24 @@
 module.exports = FileStore
 
-var util = require('util').util
-var path = require('path')
+var bluebird = require('bluebird')
 var folderToRdf = require('folder-to-rdf')
-
-var fs = require('fs')
+var fs = require('fs-extra')
+var path = require('path')
 var url = require('url')
+var util = require('util')
 var AbstractStore = require('rdf-store-abstract')
-var mkdirp = require('fs-extra').mkdirp
+var N3Parser = require('rdf-parser-n3')
+var NTriplesSerializer = require('rdf-serializer-ntriples')
 
-function writeFileRecursively (file, contents, callback) {
-  mkdirp(path.dirname(file), function (err) {
-    if (err) return callback(err)
-    return fs.writeFile(file, contents, callback)
+var mkdirp = bluebird.promisify(fs.mkdirp)
+var readFile = bluebird.promisify(fs.readFile)
+var stat = bluebird.promisify(fs.stat)
+var unlink = bluebird.promisify(fs.unlink)
+var writeFile = bluebird.promisify(fs.writeFile)
+
+function writeFileRecursively (file, contents) {
+  return mkdirp(path.dirname(file)).then(function () {
+    return writeFile(file, contents)
   })
 }
 
@@ -21,14 +27,12 @@ function FileStore (rdf, options) {
 
   var self = this
 
-  if (options == null) {
-    options = {}
-  }
+  options = options || {}
 
-  self.parse = options.parse || rdf.parseTurtle
-  self.serialize = options.serialize || rdf.serializeNTriples
+  self.parser = options.parse || N3Parser
+  self.serializer = options.serialize || NTriplesSerializer
   self.path = options.path || '.'
-  self.graphFolder = options.graphFolder || folderToRdf(options)
+  self.graphFolder = bluebird.promisify(options.graphFolder || folderToRdf(options))
   self.graphFile = options.graphFile || function (p) {
     return p.pathname.split('/').slice(1).join('_') + '.ttl'
   }
@@ -37,55 +41,74 @@ function FileStore (rdf, options) {
 util.inherits(FileStore, AbstractStore)
 
 FileStore.prototype.graphPath = function (iri) {
-  var parsed = url.parse(iri)
-  return path.join(this.path, this.graphFile(parsed))
+  return path.join(this.path, this.graphFile(url.parse(iri)))
 }
 
-FileStore.prototype.graph = function (iri, callback, options) {
+FileStore.prototype.graph = function (iri, callback) {
   var self = this
-  var graphPath = self.graphPath(iri)
 
-  // TODO maybe use good heuristics
-  // since we call fs.stats twice
-  fs.stat(graphPath, function (err, stats) {
-    if (err) return callback(null, err)
+  return new Promise(function (resolve, reject) {
+    callback = callback || function () {}
 
-    // Read the file
-    if (stats.isFile()) {
-      fs.readFile(graphPath, 'utf8', function (err, data) {
-        if (err) return callback(null, err)
+    var graphPath = self.graphPath(iri)
 
-        self.parse(
-          data.toString(),
-          callback,
-          iri)
+    // TODO maybe use good heuristics
+    // since we call fs.stats twice
+    stat(graphPath).then(function (stats) {
+      return Promise.resolve().then(function () {
+        if (stats.isFile()) {
+          // Read the file
+          return readFile(graphPath, 'utf8').then(function (data) {
+            return self.parser.parse(data.toString(), null, iri)
+          })
+        } else {
+          // Or list container
+          return self.graphFolder(graphPath)
+        }
+      }).then(function (graph) {
+        callback(null, graph)
+        resolve(graph)
+      }).catch(function (error) {
+        callback(error)
+        reject(error)
       })
-    } else { // Or list container
-      self.graphFolder(graphPath, function (err, graph) {
-        return callback(graph, err)
-      })
-    }
+    }).catch(function () {
+      callback()
+      reject()
+    })
   })
 }
 
 FileStore.prototype.add = function (iri, graph, callback) {
   var self = this
 
-  self.serialize(
-    graph,
-    function (serialized) {
-      writeFileRecursively(self.graphPath(iri), serialized, function (err) {
-        if (err) return callback(null, err)
-        callback(graph)
-      })
-    }, iri)
+  return new Promise(function (resolve, reject) {
+    callback = callback || function () {}
+
+    self.serializer.serialize(graph).then(function (serialized) {
+      return writeFileRecursively(self.graphPath(iri), serialized)
+    }).then(function () {
+      callback(null, graph)
+      resolve(graph)
+    }).catch(function (error) {
+      callback(error)
+      reject(error)
+    })
+  })
 }
 
 FileStore.prototype.delete = function (iri, callback) {
   var self = this
 
-  fs.unlink(self.graphPath(iri), function (err) {
-    if (err) return callback(null, err)
-    callback(true)
+  return new Promise(function (resolve, reject) {
+    callback = callback || function () {}
+
+    unlink(self.graphPath(iri)).then(function () {
+      callback()
+      resolve()
+    }).catch(function (error) {
+      callback(error)
+      reject(error)
+    })
   })
 }

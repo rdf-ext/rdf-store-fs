@@ -23,8 +23,12 @@
   },
   "homepage": "https://github.com/rdf-ext/rdf-store-fs",
   "dependencies": {
+    "bluebird": "^3.0.1",
     "folder-to-rdf": "^0.1.2",
     "fs-extra": "^0.23.1",
+    "rdf-ext": "^0.3.0",
+    "rdf-parser-n3": "^0.1.0",
+    "rdf-serializer-ntriples": "^0.1.0",
     "rdf-store-abstract": "^0.1.0"
   }
 }
