@@ -1,10 +1,11 @@
 {
   "name": "rdf-store-fs",
-  "version": "0.1.5",
+  "version": "0.3.0-rc1",
   "description": "File-system based RDF Store that follows the RDF Interface specification",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test"
+    "lint": "standard",
+    "test": "node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -30,5 +31,8 @@
     "rdf-parser-n3": "^0.3.0-rc1",
     "rdf-serializer-ntriples": "^0.3.0-rc1",
     "rdf-store-abstract": "^0.3.0-rc1"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.3"
   }
 }
