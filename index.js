@@ -102,11 +102,18 @@ FileStore.prototype.delete = function (iri, callback) {
 
   return new Promise(function (resolve, reject) {
     callback = callback || function () {}
-
-    unlink(self.graphPath(iri)).then(function () {
-      callback()
-      resolve()
+    stat(self.graphPath(iri))
+    .then(function (result) {
+      return unlink(self.graphPath(iri))
+    })
+    .then(function (result) {
+      callback(null, true)
+      resolve(true)
     }).catch(function (error) {
+      if (error.code === 'ENOENT') {
+        callback(null, false)
+        return resolve(false)
+      }
       callback(error)
       reject(error)
     })
