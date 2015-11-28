@@ -68,13 +68,14 @@ FileStore.prototype.graph = function (iri, callback) {
       }).then(function (graph) {
         callback(null, graph)
         resolve(graph)
-      }).catch(function (error) {
-        callback(error)
-        reject(error)
+      }).catch(function () {
+        // This returns an undefined graph
+        callback()
+        resolve()
       })
-    }).catch(function () {
-      callback()
-      reject()
+    }).catch(function (error) {
+      callback(error)
+      reject(error)
     })
   })
 }
