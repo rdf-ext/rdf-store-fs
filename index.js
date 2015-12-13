@@ -68,13 +68,14 @@ FileStore.prototype.graph = function (iri, callback) {
       }).then(function (graph) {
         callback(null, graph)
         resolve(graph)
-      }).catch(function (error) {
-        callback(error)
-        reject(error)
+      }).catch(function () {
+        // This returns an undefined graph
+        callback()
+        resolve()
       })
-    }).catch(function () {
-      callback()
-      reject()
+    }).catch(function (error) {
+      callback(error)
+      reject(error)
     })
   })
 }
@@ -102,11 +103,18 @@ FileStore.prototype.delete = function (iri, callback) {
 
   return new Promise(function (resolve, reject) {
     callback = callback || function () {}
-
-    unlink(self.graphPath(iri)).then(function () {
-      callback()
-      resolve()
+    stat(self.graphPath(iri))
+    .then(function (result) {
+      return unlink(self.graphPath(iri))
+    })
+    .then(function (result) {
+      callback(null, true)
+      resolve(true)
     }).catch(function (error) {
+      if (error.code === 'ENOENT') {
+        callback(null, false)
+        return resolve(false)
+      }
       callback(error)
       reject(error)
     })
