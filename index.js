@@ -5,7 +5,7 @@ var folderToRdf = require('folder-to-rdf')
 var fs = require('fs-extra')
 var path = require('path')
 var url = require('url')
-var util = require('util')
+var inherits = require('inherits')
 var AbstractStore = require('rdf-store-abstract')
 var N3Parser = require('rdf-parser-n3')
 var NTriplesSerializer = require('rdf-serializer-ntriples')
@@ -38,7 +38,7 @@ function FileStore (rdf, options) {
   }
 }
 
-util.inherits(FileStore, AbstractStore)
+inherits(FileStore, AbstractStore)
 
 FileStore.prototype.graphPath = function (iri) {
   return path.join(this.path, this.graphFile(url.parse(iri)))
