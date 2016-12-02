@@ -25,7 +25,7 @@
   "homepage": "https://github.com/rdf-ext/rdf-store-fs",
   "dependencies": {
     "bluebird": "^3.0.1",
-    "folder-to-rdf": "^0.3.0",
+    "folder-to-rdf": "^0.2.0",
     "fs-extra": "^0.23.1",
     "inherits": "^2.0.1",
     "rdf-ext": "^0.3.0",

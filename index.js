@@ -74,8 +74,13 @@ FileStore.prototype.graph = function (iri, callback) {
         resolve()
       })
     }).catch(function (error) {
-      callback(error)
-      reject(error)
+      if (error.code === 'ENOENT') {
+        callback()
+        resolve()
+      } else {
+        callback(error)
+        reject(error)
+      }
     })
   })
 }

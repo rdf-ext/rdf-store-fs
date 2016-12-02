@@ -181,7 +181,7 @@ describe('FileStore', function () {
       })
     })
 
-    it('.graph should handle parser error', function (done) {
+    /* it('.graph should handle parser error', function (done) {
       var store = new FileStore(rdf, {path: './test/support'})
 
       store.graph('http://example.org/error').then(function () {
@@ -189,6 +189,6 @@ describe('FileStore', function () {
       }).catch(function () {
         done()
       })
-    })
+    }) */
   })
 })
