@@ -1,3 +1,5 @@
+# This package is no longer maintained and not compatible with the latest RDF-Ext version
+
 # rdf-store-fs
 
 [![Build Status](https://travis-ci.org/rdf-ext/rdf-store-fs.svg?branch=master)](https://travis-ci.org/rdf-ext/rdf-store-fs)
