@@ -1,39 +1,45 @@
 {
   "name": "rdf-store-fs",
   "version": "0.3.1",
-  "description": "File-system based RDF Store that follows the RDF Interface specification",
+  "description": "File System RDF Store that follows the RDFJS Store interface specification",
   "main": "index.js",
   "scripts": {
-    "lint": "standard",
-    "test": "node_modules/.bin/mocha"
+    "coverage": "codecov",
+    "test": "standard && nyc --reporter=lcov mocha"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rdf-ext/rdf-store-fs.git"
+    "url": "git://github.com/rdf-ext/rdf-store-fs.git"
   },
   "keywords": [
-    "rdf-stores",
+    "fs",
+    "file",
     "rdf",
-    "linked",
-    "data"
+    "rdfjs",
+    "store"
   ],
-  "author": "Nicola Greco <me@nicola.io> (http://nicolagreco.com/)",
+  "author": "Thomas Bergwinkl <bergi@axolotlfarm.org> (https://www.bergnet.org/people/bergi/card#me)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/rdf-ext/rdf-store-fs/issues"
   },
   "homepage": "https://github.com/rdf-ext/rdf-store-fs",
   "dependencies": {
-    "bluebird": "^3.0.1",
-    "folder-to-rdf": "^0.2.0",
-    "fs-extra": "^0.23.1",
-    "inherits": "^2.0.1",
-    "rdf-ext": "^0.3.0",
-    "rdf-parser-n3": "^0.3.0",
-    "rdf-serializer-ntriples": "^0.3.0",
-    "rdf-store-abstract": "^0.3.0"
+    "@rdfjs/data-model": "^1.1.2",
+    "@rdfjs/dataset": "^1.0.1",
+    "@rdfjs/term-set": "^1.0.0",
+    "glob": "^7.1.6",
+    "multistream": "^4.0.0",
+    "rdf-dataset-ext": "^1.0.0",
+    "rdf-stream-filter": "^1.0.0",
+    "rdf-stream-to-dataset-stream": "^1.0.0",
+    "rdf-utils-fs": "^2.1.0",
+    "readable-stream": "^3.4.0"
   },
   "devDependencies": {
-    "mocha": "^2.3.3"
+    "codecov": "^3.6.1",
+    "mocha": "^6.2.2",
+    "nyc": "^14.1.1",
+    "standard": "^14.3.1"
   }
 }
