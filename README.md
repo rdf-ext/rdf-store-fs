@@ -1,11 +1,10 @@
-# This package is no longer maintained and not compatible with the latest RDF-Ext version
-
 # rdf-store-fs
 
-[![Build Status](https://travis-ci.org/rdf-ext/rdf-store-fs.svg?branch=master)](https://travis-ci.org/rdf-ext/rdf-store-fs)
-[![NPM Version](https://img.shields.io/npm/v/rdf-store-fs.svg?style=flat)](https://npm.im/rdf-store-fs)
+![npm](https://img.shields.io/npm/v/rdf-store-fs)
+![Travis (.org)](https://img.shields.io/travis/rdf-ext/rdf-store-fs)
+![Codecov](https://img.shields.io/codecov/c/github/rdf-ext/rdf-store-fs)
 
-Filesystem based RDF Store that follows the [RDF Interface](http://bergos.github.io/rdf-ext-spec/) specification
+Filesystem based RDF Store that follows the [RDF/JS: Stream interfaces](https://rdf.js.org/stream-spec/#store-interface) specification.
 
 ## Install
 
@@ -13,10 +12,60 @@ Filesystem based RDF Store that follows the [RDF Interface](http://bergos.github
 npm install --save rdf-store-fs
 ```
 
-## History
+## Usage
 
-Taken from [zazukoians/trifid-ld](https://github.com/zazukoians/trifid-ld)
+The package provides classes to implement file stores and comes with easy to use default implementations.
 
-## Licence
+### FlatMultiFileStore
 
-MIT
+The `FlatMultiFileStore` implements a file store that writes each named graph to a separate file in a flat folder structure.
+It is only possible to use named graphs from the given `baseIRI`.
+Reading or writing a graph to a different namespace will cause an error. 
+
+It can be imported with the following line of code:
+
+```js
+const FlatMultiFileStore = require('rdf-store-fs/FlatMultiFileStore')
+````
+
+The following options are supported:
+
+- `baseIRI`: The base IRI for the named graphs as a string.
+- `path`: The path to the files for the store as a string.
+
+## Example
+
+The following example creates a `FlatMultiFileStore` file store which writes it's files into the example folder.
+The quads from the `input` stream are written to the store.
+As the named graph is the same as the `baseIRI`, the quads are written to `__index.nt`.
+
+```js
+const rdf = require('@rdfjs/data-model')
+const { Readable } = require('readable-stream')
+const FlatMultiFileStore = require('rdf-store-fs/FlatMultiFileStore')
+
+const input = Readable({
+  objectMode: true,
+  read: function () {
+    this.push(rdf.quad(
+      rdf.namedNode('http://example.org/subject1'),
+      rdf.namedNode('http://www.w3.org/2000/01/rdf-schema#label'),
+      rdf.literal('this will be written to the file store'),
+      rdf.namedNode('http://example.org/')
+    ))
+
+    this.push(null)
+  }
+})
+
+const store = new FlatMultiFileStore({
+  baseIRI: 'http://example.org/',
+  path: __dirname
+})
+
+const event = store.import(input)
+
+event.on('end', () => {
+  console.log('triples written to the file store')
+})
+```

@@ -1,0 +1,2 @@
+<http://example.org/a/b> <http://example.org/predicate> "object" .
+<http://example.org/a> <http://example.org/predicate> "object" .
