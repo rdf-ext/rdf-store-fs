@@ -1,4 +1,5 @@
 const fs = require('fs')
+const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 const { promisify } = require('util')
 
@@ -13,7 +14,7 @@ const exists = async path => {
 
   return true
 }
-const mkdir = promisify(fs.mkdir)
+const mkdir = promisify(mkdirp)
 const readFile = promisify(fs.readFile)
 const rmdir = promisify(rimraf)
 const writeFile = promisify(fs.writeFile)

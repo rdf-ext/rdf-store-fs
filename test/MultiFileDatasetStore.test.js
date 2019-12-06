@@ -95,7 +95,7 @@ describe('MultiFileDatasetStore', () => {
       const path = resolve(__dirname, 'support/tmp/async')
       const store = await createDefault({ path })
 
-      await fs.mkdir(path, { recursive: true })
+      await fs.mkdir(path)
 
       const result = store.write(graph, rdf.dataset([quads._]))
 
@@ -110,7 +110,7 @@ describe('MultiFileDatasetStore', () => {
       const path = resolve(__dirname, 'support/tmp/files')
       const store = await createDefault({ path })
 
-      await fs.mkdir(path, { recursive: true })
+      await fs.mkdir(path)
 
       await store.write(graph, rdf.dataset([quads._]))
 
@@ -124,7 +124,7 @@ describe('MultiFileDatasetStore', () => {
       const path = resolve(__dirname, 'support/tmp/files')
       const store = await createDefault({ path })
 
-      await fs.mkdir(path, { recursive: true })
+      await fs.mkdir(path)
 
       await store.write(graph, rdf.dataset())
 
