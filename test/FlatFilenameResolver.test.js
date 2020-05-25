@@ -8,11 +8,12 @@ const FlatFilenameResolver = require('../lib/FlatFilenameResolver')
 const defaultBaseIRI = 'http://example.org/'
 const defaultPath = resolve(__dirname, 'support/flat')
 
-function createDefault () {
+function createDefault (overrides = {}) {
   return new FlatFilenameResolver({
     baseIRI: defaultBaseIRI,
     factory: rdf,
-    path: defaultPath
+    path: defaultPath,
+    ...overrides
   })
 }
 
@@ -79,6 +80,14 @@ describe('FlatFilenameResolver', () => {
     it('should return the path to the default file if default graph is given', async () => {
       const graph = rdf.defaultGraph()
 
+      const result = await createDefault({ extension: 'ttl' }).resolve(graph)
+
+      deepStrictEqual(result, resolve(defaultPath, '__default.ttl'))
+    })
+
+    it('should return the path to the default file if default graph is given with changed extension', async () => {
+      const graph = rdf.defaultGraph()
+
       const result = await createDefault().resolve(graph)
 
       deepStrictEqual(result, resolve(defaultPath, '__default.nt'))
@@ -92,12 +101,28 @@ describe('FlatFilenameResolver', () => {
       deepStrictEqual(result, resolve(defaultPath, '__index.nt'))
     })
 
+    it('should return the path to the index file if the given graph is the baseIRI with change extension', async () => {
+      const graph = rdf.namedNode(defaultBaseIRI)
+
+      const result = await createDefault({ extension: 'ttl' }).resolve(graph)
+
+      deepStrictEqual(result, resolve(defaultPath, '__index.ttl'))
+    })
+
     it('should return the path to the file for the given named node', async () => {
       const graph = rdf.namedNode(`${defaultBaseIRI}a/b`)
 
       const result = await createDefault().resolve(graph)
 
       deepStrictEqual(result, resolve(defaultPath, 'a%2Fb.nt'))
+    })
+
+    it('should return the path to the file for the given named node with changed extension', async () => {
+      const graph = rdf.namedNode(`${defaultBaseIRI}a/b`)
+
+      const result = await createDefault({ extension: 'ttl' }).resolve(graph)
+
+      deepStrictEqual(result, resolve(defaultPath, 'a%2Fb.ttl'))
     })
 
     it('should throw an error if a given NamedNode graph doesn\'t match the baseIRI', async () => {
