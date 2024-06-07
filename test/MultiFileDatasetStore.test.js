@@ -1,17 +1,17 @@
-const { deepStrictEqual, strictEqual } = require('assert')
-const fs = require('./support/fs')
-const { resolve } = require('path')
-const { describe, it } = require('mocha')
-const quads = require('./support/quads')
-const rdf = { ...require('@rdfjs/data-model'), ...require('@rdfjs/dataset') }
-const FlatFilenameResolver = require('../lib/FlatFilenameResolver')
-const MultiFileDatasetStore = require('../lib/MultiFileDatasetStore')
+import { deepStrictEqual, strictEqual } from 'node:assert'
+import { resolve } from 'node:path'
+import { describe, it } from 'mocha'
+import rdf from 'rdf-ext'
+import FlatFilenameResolver from '../lib/FlatFilenameResolver.js'
+import MultiFileDatasetStore from '../lib/MultiFileDatasetStore.js'
+import { baseIRI, quads } from './support/example.js'
+import * as fs from './support/fs.js'
 
-function createDefault ({ path = resolve(__dirname, 'support/flat') } = {}) {
+function createDefault ({ path = new URL('support/flat', import.meta.url).pathname } = {}) {
   return new MultiFileDatasetStore({
     factory: rdf,
     resolver: new FlatFilenameResolver({
-      baseIRI: quads.baseIRI,
+      baseIRI,
       factory: rdf,
       path
     })
@@ -34,9 +34,9 @@ describe('MultiFileDatasetStore', () => {
       const graphs = await createDefault().graphs()
 
       strictEqual(graphs.has(rdf.defaultGraph()), true)
-      strictEqual(graphs.has(rdf.namedNode(quads.baseIRI)), true)
-      strictEqual(graphs.has(rdf.namedNode(`${quads.baseIRI}a`)), true)
-      strictEqual(graphs.has(rdf.namedNode(`${quads.baseIRI}a/b`)), true)
+      strictEqual(graphs.has(rdf.namedNode(baseIRI)), true)
+      strictEqual(graphs.has(rdf.namedNode(`${baseIRI}a`)), true)
+      strictEqual(graphs.has(rdf.namedNode(`${baseIRI}a/b`)), true)
     })
   })
 
@@ -66,7 +66,7 @@ describe('MultiFileDatasetStore', () => {
     })
 
     it('should read the content of a named graph file', async () => {
-      const graph = rdf.namedNode(`${quads.baseIRI}a`)
+      const graph = rdf.namedNode(`${baseIRI}a`)
 
       const result = await createDefault().read(graph)
 
@@ -75,7 +75,7 @@ describe('MultiFileDatasetStore', () => {
     })
 
     it('should return an empty dataset for non-existing graphs', async () => {
-      const graph = rdf.namedNode(`${quads.baseIRI}z`)
+      const graph = rdf.namedNode(`${baseIRI}z`)
 
       const result = await createDefault().read(graph)
 
@@ -92,7 +92,7 @@ describe('MultiFileDatasetStore', () => {
 
     it('should be async', async () => {
       const graph = rdf.defaultGraph()
-      const path = resolve(__dirname, 'support/tmp/async')
+      const path = new URL('support/tmp/async', import.meta.url).pathname
       const store = await createDefault({ path })
 
       await fs.mkdir(path)
@@ -106,8 +106,8 @@ describe('MultiFileDatasetStore', () => {
 
     it('should write the dataset to the resolved file', async () => {
       const graph = rdf.defaultGraph()
-      const expected = resolve(__dirname, 'support/flat')
-      const path = resolve(__dirname, 'support/tmp/files')
+      const expected = new URL('support/flat', import.meta.url).pathname
+      const path = new URL('support/tmp/files', import.meta.url).pathname
       const store = await createDefault({ path })
 
       await fs.mkdir(path)
@@ -121,7 +121,7 @@ describe('MultiFileDatasetStore', () => {
 
     it('should remove the file if the dataset is empty', async () => {
       const graph = rdf.defaultGraph()
-      const path = resolve(__dirname, 'support/tmp/files')
+      const path = new URL('support/tmp/files', import.meta.url).pathname
       const store = await createDefault({ path })
 
       await fs.mkdir(path)

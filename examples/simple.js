@@ -1,8 +1,9 @@
-const rdf = require('@rdfjs/data-model')
-const { Readable } = require('readable-stream')
-const FlatMultiFileStore = require('../FlatMultiFileStore')
+import { dirname } from 'node:path'
+import rdf from 'rdf-ext'
+import { Readable } from 'readable-stream'
+import FlatMultiFileStore from '../FlatMultiFileStore.js'
 
-const input = Readable({
+const input = new Readable({
   objectMode: true,
   read: function () {
     this.push(rdf.quad(
@@ -18,7 +19,7 @@ const input = Readable({
 
 const store = new FlatMultiFileStore({
   baseIRI: 'http://example.org/',
-  path: __dirname
+  path: dirname(new URL(import.meta.url).pathname)
 })
 
 const event = store.import(input)

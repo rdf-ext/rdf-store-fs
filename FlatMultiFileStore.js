@@ -1,5 +1,5 @@
-const MultiFileStore = require('./MultiFileStore')
-const FlatFilenameResolver = require('./lib/FlatFilenameResolver')
+import FlatFilenameResolver from './lib/FlatFilenameResolver.js'
+import MultiFileStore from './MultiFileStore.js'
 
 class FlatMultiFileStore extends MultiFileStore {
   constructor ({ baseIRI, factory, path, extension }) {
@@ -15,4 +15,4 @@ class FlatMultiFileStore extends MultiFileStore {
   }
 }
 
-module.exports = FlatMultiFileStore
+export default FlatMultiFileStore

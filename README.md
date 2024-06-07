@@ -1,8 +1,7 @@
 # rdf-store-fs
 
-[![npm](https://img.shields.io/npm/v/rdf-store-fs)](https://www.npmjs.com/package/rdf-store-fs)
-[![Travis (.org)](https://img.shields.io/travis/rdf-ext/rdf-store-fs)](https://travis-ci.org/rdf-ext/rdf-store-fs)
-[![Codecov](https://img.shields.io/codecov/c/github/rdf-ext/rdf-store-fs)](https://codecov.io/gh/rdf-ext/rdf-store-fs)
+[![build status](https://img.shields.io/github/actions/workflow/status/rdf-ext/rdf-store-fs/test.yaml?branch=master)](https://github.com/rdf-ext/rdf-store-fs/actions/workflows/test.yaml)
+[![npm version](https://img.shields.io/npm/v/rdf-store-fs.svg)](https://www.npmjs.com/package/rdf-store-fs)
 
 Filesystem based RDF Store that follows the [RDF/JS: Stream interfaces](https://rdf.js.org/stream-spec/#store-interface) specification.
 

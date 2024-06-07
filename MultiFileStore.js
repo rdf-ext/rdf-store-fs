@@ -1,12 +1,11 @@
-const { promisify } = require('util')
-const multistream = require('multistream')
-const { addAll, toStream } = require('rdf-dataset-ext')
-const FilterStream = require('rdf-stream-filter')
-const byGraph = require('rdf-stream-to-dataset-stream/byGraph')
-const rdf = { ...require('@rdfjs/data-model'), ...require('@rdfjs/dataset') }
-const { finished, Writable } = require('readable-stream')
-const MultiFileDatasetStore = require('./lib/MultiFileDatasetStore')
-const promiseToEvent = require('./lib/promiseToEvent')
+import { promisify } from 'node:util'
+import multistream from 'multistream'
+import rdf from 'rdf-ext'
+import FilterStream from 'rdf-stream-filter'
+import byGraph from 'rdf-stream-to-dataset-stream/byGraph.js'
+import { finished, Writable } from 'readable-stream'
+import MultiFileDatasetStore from './lib/MultiFileDatasetStore.js'
+import promiseToEvent from './lib/promiseToEvent.js'
 
 class MultiFileStore {
   constructor ({ factory = rdf, resolver }) {
@@ -32,7 +31,7 @@ class MultiFileStore {
 
       const dataset = await this.datastore.read(current)
 
-      callback(null, new FilterStream(toStream(dataset), subject, predicate, object, current))
+      callback(null, new FilterStream(dataset.toStream(), subject, predicate, object, current))
     })
   }
 
@@ -43,7 +42,7 @@ class MultiFileStore {
         const graph = [...dataset][0].graph
 
         if (!truncate) {
-          addAll(dataset, await this.datastore.read(graph))
+          dataset.addAll(await this.datastore.read(graph))
         }
 
         await this.datastore.write(graph, dataset)
@@ -101,4 +100,4 @@ class MultiFileStore {
   }
 }
 
-module.exports = MultiFileStore
+export default MultiFileStore

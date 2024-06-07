@@ -2,14 +2,14 @@
   "name": "rdf-store-fs",
   "version": "1.1.0",
   "description": "File System RDF Store that follows the RDFJS Store interface specification",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "coverage": "codecov",
-    "test": "standard && nyc --reporter=lcov mocha"
+    "test": "stricter-standard && c8 --reporter=lcov --reporter=text-summary mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/rdf-ext/rdf-store-fs.git"
+    "url": "https://github.com/rdf-ext/rdf-store-fs.git"
   },
   "keywords": [
     "fs",
@@ -25,22 +25,18 @@
   },
   "homepage": "https://github.com/rdf-ext/rdf-store-fs",
   "dependencies": {
-    "@rdfjs/data-model": "^1.1.2",
-    "@rdfjs/dataset": "^1.0.1",
-    "@rdfjs/term-set": "^1.0.0",
-    "glob": "^7.1.6",
-    "multistream": "^4.0.0",
-    "rdf-dataset-ext": "^1.0.0",
+    "glob": "^10.4.1",
+    "multistream": "^4.1.0",
+    "rdf-ext": "^2.5.1",
     "rdf-stream-filter": "^1.0.0",
     "rdf-stream-to-dataset-stream": "^1.0.0",
-    "rdf-utils-fs": "^2.1.0",
-    "readable-stream": "^3.4.0"
+    "readable-stream": "^4.5.2"
   },
   "devDependencies": {
-    "codecov": "^3.6.1",
-    "mkdirp": "^0.5.1",
-    "mocha": "^6.2.2",
-    "nyc": "^14.1.1",
-    "standard": "^14.3.1"
+    "c8": "^9.1.0",
+    "mkdirp": "^3.0.1",
+    "mocha": "^10.4.0",
+    "rimraf": "^5.0.7",
+    "stricter-standard": "^0.3.1"
   }
 }
