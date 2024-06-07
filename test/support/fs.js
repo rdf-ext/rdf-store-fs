@@ -1,7 +1,7 @@
-const fs = require('fs')
-const mkdirp = require('mkdirp')
-const rimraf = require('rimraf')
-const { promisify } = require('util')
+import fs from 'node:fs'
+import { promisify } from 'node:util'
+import { mkdirp } from 'mkdirp'
+import { rimraf } from 'rimraf'
 
 const copyFile = promisify(fs.copyFile)
 const createReadStream = fs.createReadStream
@@ -14,12 +14,12 @@ const exists = async path => {
 
   return true
 }
-const mkdir = promisify(mkdirp)
+const mkdir = mkdirp
 const readFile = promisify(fs.readFile)
-const rmdir = promisify(rimraf)
+const rmdir = rimraf
 const writeFile = promisify(fs.writeFile)
 
-module.exports = {
+export {
   copyFile,
   createReadStream,
   exists,

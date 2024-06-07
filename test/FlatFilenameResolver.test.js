@@ -1,12 +1,11 @@
-const { deepStrictEqual, strictEqual } = require('assert')
-const { resolve } = require('path')
-const { describe, it } = require('mocha')
-const rdf = require('@rdfjs/data-model')
-const TermSet = require('@rdfjs/term-set')
-const FlatFilenameResolver = require('../lib/FlatFilenameResolver')
+import { deepStrictEqual, strictEqual } from 'node:assert'
+import { resolve } from 'node:path'
+import { describe, it } from 'mocha'
+import rdf from 'rdf-ext'
+import FlatFilenameResolver from '../lib/FlatFilenameResolver.js'
 
 const defaultBaseIRI = 'http://example.org/'
-const defaultPath = resolve(__dirname, 'support/flat')
+const defaultPath = new URL('support/flat', import.meta.url).pathname
 
 function createDefault (overrides = {}) {
   return new FlatFilenameResolver({
@@ -32,7 +31,7 @@ describe('FlatFilenameResolver', () => {
     it('should return a TermSet', async () => {
       const result = await createDefault().graphs()
 
-      strictEqual(result instanceof TermSet, true)
+      strictEqual(typeof result.has, 'function')
     })
 
     it('should return a TermSet which contains the given existing graph', async () => {

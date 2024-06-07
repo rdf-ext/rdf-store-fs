@@ -1,5 +1,4 @@
-const rdf = { ...require('@rdfjs/data-model'), ...require('@rdfjs/dataset') }
-const { toStream } = require('rdf-dataset-ext')
+import rdf from 'rdf-ext'
 
 const baseIRI = 'http://example.org/'
 
@@ -30,8 +29,12 @@ const quads = {
   )
 }
 
-quads.baseIRI = baseIRI
-quads.toDataset = () => rdf.dataset([quads._, quads.root, quads.a, quads.ab])
-quads.toStream = () => toStream(quads.toDataset())
+const toDataset = () => rdf.dataset([quads._, quads.root, quads.a, quads.ab])
+const toStream = () => toDataset().toStream()
 
-module.exports = quads
+export {
+  baseIRI,
+  quads,
+  toDataset,
+  toStream
+}

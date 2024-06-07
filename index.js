@@ -1,7 +1,7 @@
-const FlatMultiFileStore = require('./FlatMultiFileStore')
-const MultiFileStore = require('./MultiFileStore')
+import FlatMultiFileStore from './FlatMultiFileStore.js'
+import MultiFileStore from './MultiFileStore.js'
 
-module.exports = {
+export {
   FlatMultiFileStore,
   MultiFileStore
 }
