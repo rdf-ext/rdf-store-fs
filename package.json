@@ -1,6 +1,6 @@
 {
   "name": "rdf-store-fs",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "File System RDF Store that follows the RDFJS Store interface specification",
   "type": "module",
   "main": "index.js",
