@@ -28,7 +28,7 @@
     "glob": "^10.4.1",
     "multistream": "^4.1.0",
     "rdf-ext": "^2.5.1",
-    "rdf-stream-filter": "^1.0.0",
+    "rdf-stream-filter": "^2.0.0",
     "rdf-stream-to-dataset-stream": "^1.0.0",
     "readable-stream": "^4.5.2"
   },
